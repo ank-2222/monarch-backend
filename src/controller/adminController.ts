@@ -56,7 +56,7 @@ export class AdminController {
         } catch (error: any) {
             throw new ErrorHandler({
                 message: error.message,
-                message_code: "ERROR_REGISTERING_ADMIN",
+                message_code: error.message_code || "ERROR_REGISTERING_ADMIN",
             });
         }
     }
@@ -83,7 +83,7 @@ export class AdminController {
         } catch (error: any) {
             throw new ErrorHandler({
                 message: error.message,
-                message_code: "ERROR_LOGGING_IN_ADMIN",
+                message_code: error.message_code || "ERROR_LOGGING_IN_ADMIN",
             });
         }
     }
@@ -106,7 +106,7 @@ export class AdminController {
         } catch (error: any) {
             throw new ErrorHandler({
                 message: error.message,
-                message_code: "ERROR_FETCHING_ADMIN_PROFILE",
+                message_code:error.message_code ||  "ERROR_FETCHING_ADMIN_PROFILE",
             });
         }
     }
@@ -138,7 +138,7 @@ export class AdminController {
         } catch (error: any) {
             throw new ErrorHandler({
                 message: error.message,
-                message_code: "ERROR_UPDATING_ADMIN_PROFILE",
+                message_code:error.message_code ||  "ERROR_UPDATING_ADMIN_PROFILE",
             });
         }
     }
