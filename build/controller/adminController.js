@@ -59,6 +59,7 @@ class AdminController {
                     throw new errors_handler_1.default({
                         message: "Admin already exists",
                         message_code: "ADMIN_ALREADY_EXIST",
+                        status: 400,
                     });
                 }
                 const admin = yield Admin_1.Admin.create({ name, email, password });
@@ -75,7 +76,8 @@ class AdminController {
             catch (error) {
                 throw new errors_handler_1.default({
                     message: error.message,
-                    message_code: "ERROR_REGISTERING_ADMIN",
+                    message_code: error.message_code || "ERROR_REGISTERING_ADMIN",
+                    status: error.status || 500,
                 });
             }
         });
@@ -89,6 +91,7 @@ class AdminController {
                     throw new errors_handler_1.default({
                         message: "Invalid email or password",
                         message_code: "INVALID_CREDENTIALS",
+                        status: 401,
                     });
                 }
                 return {
@@ -104,7 +107,10 @@ class AdminController {
             catch (error) {
                 throw new errors_handler_1.default({
                     message: error.message,
-                    message_code: "ERROR_LOGGING_IN_ADMIN",
+                    message_code: error.message_code
+                        ? error.message_code
+                        : "ERROR_LOGGING_IN_ADMIN",
+                    status: error.status || 500,
                 });
             }
         });
@@ -118,6 +124,7 @@ class AdminController {
                     throw new errors_handler_1.default({
                         message: "Admin not found",
                         message_code: "ADMIN_NOT_FOUND",
+                        status: 404,
                     });
                 }
                 return {
@@ -129,7 +136,8 @@ class AdminController {
             catch (error) {
                 throw new errors_handler_1.default({
                     message: error.message,
-                    message_code: "ERROR_FETCHING_ADMIN_PROFILE",
+                    message_code: error.message_code || "ERROR_FETCHING_ADMIN_PROFILE",
+                    status: error.status || 500,
                 });
             }
         });
@@ -143,6 +151,7 @@ class AdminController {
                     throw new errors_handler_1.default({
                         message: "Admin not found",
                         message_code: "ADMIN_NOT_FOUND",
+                        status: 404,
                     });
                 }
                 admin.name = req.body.name || admin.name;
@@ -163,7 +172,8 @@ class AdminController {
             catch (error) {
                 throw new errors_handler_1.default({
                     message: error.message,
-                    message_code: "ERROR_UPDATING_ADMIN_PROFILE",
+                    message_code: error.message_code || "ERROR_UPDATING_ADMIN_PROFILE",
+                    status: error.status || 500,
                 });
             }
         });

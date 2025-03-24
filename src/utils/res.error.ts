@@ -20,7 +20,7 @@ export const errorHandler = (
   
 logger.error(err.message);
   if (err instanceof ErrorHandler) {
-    return res.status(500).json({ message: err.message, message_code: err.message_code, data: err.data });
+    return res.status(err.status).json({ message: err.message, message_code: err.message_code, data: err.data });
   }
 
   return res.status(500).json({ message: "Something went wrong!" });

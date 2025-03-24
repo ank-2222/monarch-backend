@@ -18,7 +18,7 @@ const errors_handler_1 = __importDefault(require("./errors.handler"));
 const errorHandler = (err, req, res) => {
     logger.error(err.message);
     if (err instanceof errors_handler_1.default) {
-        return res.status(500).json({ message: err.message, message_code: err.message_code, data: err.data });
+        return res.status(err.status).json({ message: err.message, message_code: err.message_code, data: err.data });
     }
     return res.status(500).json({ message: "Something went wrong!" });
 };
