@@ -69,6 +69,7 @@ class PropertyController {
                 throw new errors_handler_1.default({
                     message: error.message,
                     message_code: "ERROR_CREATING_PROPERTY",
+                    status: 500,
                 });
             }
         });
@@ -76,10 +77,46 @@ class PropertyController {
     getAllProperties(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const properties = yield propertyService.getAllProperties();
+                const page = Number(req.query.page) || 1;
+                const limit = Number(req.query.limit) || 10;
+                const filters = {
+                    location: req.query.location ? String(req.query.location) : undefined,
+                    city: req.query.city ? String(req.query.city) : undefined,
+                    area: req.query.area ? String(req.query.area) : undefined,
+                    minPrice: req.query.minPrice ? Number(req.query.minPrice) : undefined,
+                    maxPrice: req.query.maxPrice ? Number(req.query.maxPrice) : undefined,
+                    minSize: req.query.minSize ? Number(req.query.minSize) : undefined,
+                    maxSize: req.query.maxSize ? Number(req.query.maxSize) : undefined,
+                    bedrooms: req.query.bedrooms ? Number(req.query.bedrooms) : undefined,
+                    bathrooms: req.query.bathrooms
+                        ? Number(req.query.bathrooms)
+                        : undefined,
+                    furnished: req.query.furnished
+                        ? req.query.furnished === "true"
+                        : undefined,
+                    property_type: req.query.property_type
+                        ? String(req.query.property_type)
+                        : undefined,
+                    listing_type: req.query.listing_type
+                        ? String(req.query.listing_type)
+                        : undefined,
+                    sortBy: req.query.sortBy ? String(req.query.sortBy) : undefined,
+                    sortOrder: req.query.sortOrder === "asc" || req.query.sortOrder === "desc"
+                        ? req.query.sortOrder
+                        : undefined,
+                };
+                const { properties, total, totalPages } = yield propertyService.getAllProperties(page, limit, filters);
                 const response = {
                     message: "Properties retrieved successfully",
-                    data: properties,
+                    data: {
+                        properties,
+                        pagination: {
+                            total,
+                            totalPages,
+                            currentPage: page,
+                            limit,
+                        },
+                    },
                     message_code: "PROPERTIES_RETRIEVED",
                 };
                 return response;
@@ -88,7 +125,7 @@ class PropertyController {
                 throw new errors_handler_1.default({
                     message: error.message,
                     message_code: "ERROR_FETCHING_PROPERTIES",
-                    data: error,
+                    status: 500,
                 });
             }
         });
@@ -101,6 +138,7 @@ class PropertyController {
                     throw new errors_handler_1.default({
                         message: "Property not found",
                         message_code: "PROPERTY_NOT_FOUND",
+                        status: 404,
                     });
                 }
                 const response = {
@@ -114,7 +152,7 @@ class PropertyController {
                 throw new errors_handler_1.default({
                     message: error.message,
                     message_code: "ERROR_FETCHING_PROPERTY",
-                    data: error,
+                    status: 500,
                 });
             }
         });
@@ -127,6 +165,7 @@ class PropertyController {
                     throw new errors_handler_1.default({
                         message: "Property not found",
                         message_code: "PROPERTY_NOT_FOUND",
+                        status: 404,
                     });
                 }
                 const response = {
@@ -141,6 +180,7 @@ class PropertyController {
                     message: error.message,
                     message_code: "ERROR_UPDATING_PROPERTY",
                     data: error,
+                    status: 500,
                 });
             }
         });
@@ -153,6 +193,7 @@ class PropertyController {
                     throw new errors_handler_1.default({
                         message: "Property not found",
                         message_code: "PROPERTY_NOT_FOUND",
+                        status: 404,
                     });
                 }
                 const response = {
@@ -167,6 +208,7 @@ class PropertyController {
                     message: error.message,
                     message_code: "ERROR_DELETING_PROPERTY",
                     data: error,
+                    status: 500,
                 });
             }
         });

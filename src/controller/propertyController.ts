@@ -54,19 +54,58 @@ export class PropertyController {
       throw new ErrorHandler({
         message: error.message,
         message_code: "ERROR_CREATING_PROPERTY",
+        status: 500,
       });
     }
   }
 
-  async getAllProperties(
-    req: Request,
-    res: Response
-  ): Promise<IApiResponse<any>> {
+  async getAllProperties(req: Request, res: Response): Promise<IApiResponse<any>> {
     try {
-      const properties = await propertyService.getAllProperties();
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+
+      const filters = {
+        location: req.query.location ? String(req.query.location) : undefined,
+        city: req.query.city ? String(req.query.city) : undefined,
+        area: req.query.area ? String(req.query.area) : undefined,
+        minPrice: req.query.minPrice ? Number(req.query.minPrice) : undefined,
+        maxPrice: req.query.maxPrice ? Number(req.query.maxPrice) : undefined,
+        minSize: req.query.minSize ? Number(req.query.minSize) : undefined,
+        maxSize: req.query.maxSize ? Number(req.query.maxSize) : undefined,
+        bedrooms: req.query.bedrooms ? Number(req.query.bedrooms) : undefined,
+        bathrooms: req.query.bathrooms
+          ? Number(req.query.bathrooms)
+          : undefined,
+        furnished: req.query.furnished
+          ? req.query.furnished === "true"
+          : undefined,
+        property_type: req.query.property_type
+          ? String(req.query.property_type)
+          : undefined,
+        listing_type: req.query.listing_type
+          ? String(req.query.listing_type)
+          : undefined,
+        sortBy: req.query.sortBy ? String(req.query.sortBy) : undefined,
+        sortOrder:
+          req.query.sortOrder === "asc" || req.query.sortOrder === "desc"
+            ? (req.query.sortOrder as "asc" | "desc")
+            : undefined,
+      };
+
+      const { properties, total, totalPages } =
+        await propertyService.getAllProperties(page, limit, filters);
+
       const response: IApiResponse<any> = {
         message: "Properties retrieved successfully",
-        data: properties,
+        data: {
+          properties,
+          pagination: {
+            total,
+            totalPages,
+            currentPage: page,
+            limit,
+          },
+        },
         message_code: "PROPERTIES_RETRIEVED",
       };
       return response;
@@ -74,7 +113,7 @@ export class PropertyController {
       throw new ErrorHandler({
         message: error.message,
         message_code: "ERROR_FETCHING_PROPERTIES",
-        data: error,
+        status: 500,
       });
     }
   }
@@ -89,6 +128,7 @@ export class PropertyController {
         throw new ErrorHandler({
           message: "Property not found",
           message_code: "PROPERTY_NOT_FOUND",
+          status: 404,
         });
       }
       const response: IApiResponse<any> = {
@@ -101,7 +141,7 @@ export class PropertyController {
       throw new ErrorHandler({
         message: error.message,
         message_code: "ERROR_FETCHING_PROPERTY",
-        data: error,
+        status: 500,
       });
     }
   }
@@ -119,6 +159,7 @@ export class PropertyController {
         throw new ErrorHandler({
           message: "Property not found",
           message_code: "PROPERTY_NOT_FOUND",
+          status: 404,
         });
       }
       const response: IApiResponse<any> = {
@@ -132,6 +173,7 @@ export class PropertyController {
         message: error.message,
         message_code: "ERROR_UPDATING_PROPERTY",
         data: error,
+        status: 500,
       });
     }
   }
@@ -146,6 +188,7 @@ export class PropertyController {
         throw new ErrorHandler({
           message: "Property not found",
           message_code: "PROPERTY_NOT_FOUND",
+          status: 404,
         });
       }
       const response: IApiResponse<any> = {
@@ -159,6 +202,7 @@ export class PropertyController {
         message: error.message,
         message_code: "ERROR_DELETING_PROPERTY",
         data: error,
+        status: 500,
       });
     }
   }
