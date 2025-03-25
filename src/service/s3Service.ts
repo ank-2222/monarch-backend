@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
-export const getPresignedUrl = async (req:Request, res:Response) => {
+export const getPresignedUrl = async (req: Request, res: Response) => {
   try {
     const { fileName, fileType } = req.body;
 
@@ -23,16 +23,20 @@ export const getPresignedUrl = async (req:Request, res:Response) => {
     };
 
     const url = await s3.getSignedUrlPromise("putObject", params);
-    const response:IApiResponse<any> = {
-        message: "Presigned URL generated successfully",
-        data: url,
-        message_code: "PRESIGNED_URL_GENERATED",
-    }
-        
-    res.json(response);
+    const response: IApiResponse<any> = {
+      message: "Presigned URL generated successfully",
+      data: url,
+      message_code: "PRESIGNED_URL_GENERATED",
+    };
 
+    res.json(response);
   } catch (error) {
     console.error("Error generating presigned URL", error);
-    res.status(500).json({ message: "Error generating presigned URL", message_code: "PRESIGNED_URL_ERROR" });
+    res
+      .status(500)
+      .json({
+        message: "Error generating presigned URL",
+        message_code: "PRESIGNED_URL_ERROR",
+      });
   }
 };
