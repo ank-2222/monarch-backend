@@ -30,9 +30,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 import propertyRoutes from "./routes/propertyRoute";
 import adminRoutes from "./routes/adminRoute";
 import blogRoute from "./routes/blogRoute";
+import s3Route from "./routes/s3Route";
 app.use("/v1/property", propertyRoutes);
 app.use("/v1/admin", adminRoutes);
 app.use("/v1/blog", blogRoute);
+app.use("/v1", s3Route);
 
 //---------------------------------------------------------------
 

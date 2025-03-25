@@ -30,6 +30,11 @@ class AdminController {
                 }
                 else if (path === "/login" && method === "POST") {
                     const result = yield this.login(req, res);
+                    res.cookie("authToken", result.data.token, {
+                        httpOnly: true, // Prevents client-side access
+                        secure: process.env.NODE_ENV === "production", // Ensures HTTPS in production
+                        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiry
+                    });
                     res.status(200).json(result);
                 }
                 else if (path === "/profile" && method === "GET") {

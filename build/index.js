@@ -62,9 +62,11 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 const propertyRoute_1 = __importDefault(require("./routes/propertyRoute"));
 const adminRoute_1 = __importDefault(require("./routes/adminRoute"));
 const blogRoute_1 = __importDefault(require("./routes/blogRoute"));
+const s3Route_1 = __importDefault(require("./routes/s3Route"));
 app.use("/v1/property", propertyRoute_1.default);
 app.use("/v1/admin", adminRoute_1.default);
 app.use("/v1/blog", blogRoute_1.default);
+app.use("/v1", s3Route_1.default);
 //---------------------------------------------------------------
 app.get("/health", (req, res) => {
     const date = (0, moment_1.default)().format("YYYY-MM-DD HH:mm:ss");

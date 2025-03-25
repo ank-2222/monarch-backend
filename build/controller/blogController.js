@@ -175,7 +175,7 @@ class BlogController {
                 }
                 return ({
                     message: "Blog updated successfully",
-                    message_code: "BLOG_UPDATED",
+                    message_code: "BLOG_STATUS_UPDATED",
                     data: blog,
                 });
             }
