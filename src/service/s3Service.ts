@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import AWS from "aws-sdk";
+import { IApiResponse } from "../interface/apiResponse";
 require("dotenv").config();
 
 const s3 = new AWS.S3({
@@ -22,10 +23,16 @@ export const getPresignedUrl = async (req:Request, res:Response) => {
     };
 
     const url = await s3.getSignedUrlPromise("putObject", params);
-    res.json({ url, key: params.Key });
+    const response:IApiResponse<any> = {
+        message: "Presigned URL generated successfully",
+        data: url,
+        message_code: "PRESIGNED_URL_GENERATED",
+    }
+        
+    res.json(response);
 
   } catch (error) {
     console.error("Error generating presigned URL", error);
-    res.status(500).json({ error: "Failed to generate URL" });
+    res.status(500).json({ message: "Error generating presigned URL", message_code: "PRESIGNED_URL_ERROR" });
   }
 };
