@@ -25,7 +25,7 @@ export const getPresignedUrl = async (req: Request, res: Response) => {
     const url = await s3.getSignedUrlPromise("putObject", params);
     const response: IApiResponse<any> = {
       message: "Presigned URL generated successfully",
-      data: url,
+      data: { url ,key:params.Key},
       message_code: "PRESIGNED_URL_GENERATED",
     };
 
