@@ -31,11 +31,21 @@ const getPresignedUrl = (req, res) => __awaiter(void 0, void 0, void 0, function
             ACL: "public-read",
         };
         const url = yield s3.getSignedUrlPromise("putObject", params);
-        res.json({ url, key: params.Key });
+        const response = {
+            message: "Presigned URL generated successfully",
+            data: { url, key: params.Key },
+            message_code: "PRESIGNED_URL_GENERATED",
+        };
+        res.json(response);
     }
     catch (error) {
         console.error("Error generating presigned URL", error);
-        res.status(500).json({ error: "Failed to generate URL" });
+        res
+            .status(500)
+            .json({
+            message: "Error generating presigned URL",
+            message_code: "PRESIGNED_URL_ERROR",
+        });
     }
 });
 exports.getPresignedUrl = getPresignedUrl;

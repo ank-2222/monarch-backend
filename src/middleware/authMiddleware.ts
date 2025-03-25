@@ -8,7 +8,7 @@ export interface AuthRequest extends Request {
 
 export const protectAdmin = (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
     return new Promise(async (resolve, reject) => {
-      const cookieToken = req.cookies.authToken;
+      const cookieToken = req?.cookies?.authToken;
      
       const token = cookieToken || req.headers.authorization?.split(" ")[1];
   
