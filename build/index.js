@@ -48,7 +48,7 @@ const port = process.env.PORT || 5000;
 const moment_1 = __importDefault(require("moment"));
 const db_config_1 = require("./config/db.config");
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://property-frontend-yrc7.onrender.com", "http://localhost:5174"],
     credentials: true,
 }));
 (0, db_config_1.connectDB)();

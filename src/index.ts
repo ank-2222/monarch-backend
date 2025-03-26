@@ -12,7 +12,7 @@ import { connectDB } from "./config/db.config";
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173","https://property-frontend-yrc7.onrender.com","http://localhost:5174"],
     credentials: true,
   })
 );
