@@ -19,7 +19,6 @@ export const getPresignedUrl = async (req: Request, res: Response) => {
       Key: `uploads/${Date.now()}-${fileName}`,
       Expires: 60, // URL expires in 60 seconds
       ContentType: fileType,
-      ACL: "public-read",
     };
 
     const url = await s3.getSignedUrlPromise("putObject", params);
