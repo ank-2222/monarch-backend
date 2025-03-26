@@ -28,7 +28,6 @@ const getPresignedUrl = (req, res) => __awaiter(void 0, void 0, void 0, function
             Key: `uploads/${Date.now()}-${fileName}`,
             Expires: 60, // URL expires in 60 seconds
             ContentType: fileType,
-            ACL: "public-read",
         };
         const url = yield s3.getSignedUrlPromise("putObject", params);
         const response = {
