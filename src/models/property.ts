@@ -43,13 +43,22 @@ const PropertySchema = new Schema<IProperty>(
     parking_spaces: { type: Number, required: true },
     amenities: [{ type: String }],
     images: [{ type: String }],
-    property_type: { type: String, required: true },
     furnished: { type: Boolean, required: true },
     year_built: { type: Number, required: true },
-    listing_type: { type: String, required: true },
+    property_type: {
+      type: String,
+      required: true,
+      enum: ["apartment", "villa", "house"], // Restrict values
+    },
+    listing_type: {
+      type: String,
+      required: true,
+      enum: ["rent", "sale"], // Restrict values
+    },
   },
   { timestamps: true }
 );
+
 
 const Property = mongoose.model<IProperty>("Property", PropertySchema);
 export default Property;
