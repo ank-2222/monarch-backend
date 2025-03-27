@@ -51,10 +51,18 @@ const PropertySchema = new mongoose_1.Schema({
     parking_spaces: { type: Number, required: true },
     amenities: [{ type: String }],
     images: [{ type: String }],
-    property_type: { type: String, required: true },
     furnished: { type: Boolean, required: true },
     year_built: { type: Number, required: true },
-    listing_type: { type: String, required: true },
+    property_type: {
+        type: String,
+        required: true,
+        enum: ["apartment", "villa", "house"], // Restrict values
+    },
+    listing_type: {
+        type: String,
+        required: true,
+        enum: ["rent", "sale"], // Restrict values
+    },
 }, { timestamps: true });
 const Property = mongoose_1.default.model("Property", PropertySchema);
 exports.default = Property;
