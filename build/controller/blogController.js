@@ -54,9 +54,34 @@ class BlogController {
                         res.status(200).json(result);
                     }
                 }
+                else if (path === "/published") {
+                    if (method === "GET") {
+                        const result = yield this.getPublishedBlogs(req, res);
+                        res.status(200).json(result);
+                    }
+                }
             }
             catch (error) {
                 (0, res_error_1.errorHandler)(error, req, res);
+            }
+        });
+    }
+    getPublishedBlogs(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const blogs = yield blogService.getPublishedBlogs();
+                return ({
+                    message: "Blogs retrieved successfully",
+                    message_code: "BLOGS_RETRIEVED",
+                    data: blogs,
+                });
+            }
+            catch (error) {
+                throw new errors_handler_1.default({
+                    message: error.message,
+                    message_code: "ERROR_FETCHING_BLOG",
+                    status: 500,
+                });
             }
         });
     }

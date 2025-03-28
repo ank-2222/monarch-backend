@@ -15,25 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.protectAdmin = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Admin_1 = require("../models/Admin");
-const protectAdmin = (req, res, next) => {
-    return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
-        var _a, _b;
-        const cookieToken = (_a = req === null || req === void 0 ? void 0 : req.cookies) === null || _a === void 0 ? void 0 : _a.authToken;
-        const token = cookieToken || ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1]);
+const errors_handler_1 = __importDefault(require("../utils/errors.handler"));
+const protectAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const token = ((_a = req === null || req === void 0 ? void 0 : req.cookies) === null || _a === void 0 ? void 0 : _a.authToken) || ((_b = req.headers.authorization) === null || _b === void 0 ? void 0 : _b.split(" ")[1]);
         if (!token) {
-            res.status(401).json({ message: "Not authorized, no token", message_code: "NO_TOKEN" });
-            return reject();
+            throw new errors_handler_1.default({
+                message: "No token has been provided",
+                message_code: "NO_TOKEN",
+            });
         }
-        try {
-            const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-            req.user = yield Admin_1.Admin.findById(decoded.id).select("-password");
-            resolve();
-            next();
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        const user = yield Admin_1.Admin.findById(decoded.id).select("-password");
+        if (!user) {
+            throw new errors_handler_1.default({
+                message: "User not found",
+                message_code: "USER_NOT_FOUND",
+            });
         }
-        catch (error) {
-            res.status(401).json({ message: "Not authorized, token failed", message_code: "TOKEN_FAILED" });
-            reject();
-        }
-    }));
-};
+        req.user = user;
+        next(); // Call next() directly without resolve()
+    }
+    catch (error) {
+        next(error instanceof errors_handler_1.default
+            ? error
+            : new errors_handler_1.default({
+                message: "Not authorized, token failed",
+                message_code: "TOKEN_FAILED",
+            }));
+    }
+});
 exports.protectAdmin = protectAdmin;

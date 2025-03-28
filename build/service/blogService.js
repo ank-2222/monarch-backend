@@ -62,5 +62,10 @@ class BlogService {
             return yield Blog_1.Blog.findByIdAndUpdate(blogId, { status }, { new: true });
         });
     }
+    getPublishedBlogs() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield Blog_1.Blog.find({ status: "published" });
+        });
+    }
 }
 exports.BlogService = BlogService;

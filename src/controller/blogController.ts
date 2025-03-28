@@ -37,12 +37,35 @@ export class BlogController  {
                     const result = await this.togglePublish(req, res);
                     res.status(200).json(result);
                 }
-            }
+            }else if (path === "/published") {
+              if (method === "GET") {
+                  const result = await this.getPublishedBlogs(req, res);
+                  res.status(200).json(result);
+              }
+          }
         } catch (error: any) {
             errorHandler(error, req, res);
         }
     };
     
+
+async getPublishedBlogs(req: Request, res: Response): Promise<IApiResponse<any>> {
+    try {
+      const blogs = await blogService.getPublishedBlogs();
+      return({
+        message: "Blogs retrieved successfully",
+        message_code: "BLOGS_RETRIEVED",
+        data: blogs,
+      });
+    } catch (error: any) {
+      throw new ErrorHandler({
+        message: error.message,
+        message_code: "ERROR_FETCHING_BLOG",
+        status: 500,
+      });
+    }
+  }
+
   async createBlog(req: Request, res: Response): Promise<IApiResponse<any>> {
     try {
       const { user }: any = req;

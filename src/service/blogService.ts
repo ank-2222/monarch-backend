@@ -58,4 +58,10 @@ export class BlogService {
   async togglePublish(blogId: string, status: "draft" | "published"): Promise<IBlog | null> {
     return await Blog.findByIdAndUpdate(blogId, { status }, { new: true });
   }
+
+  async getPublishedBlogs(): Promise<IBlog[]> {
+    return await Blog.find({ status: "published" });
+  }
+  
+
 }

@@ -14,4 +14,5 @@ router.get("/:id", blogController.execute);
 router.put("/:id", authMiddleware_1.protectAdmin, blogController.execute);
 router.delete("/:id", authMiddleware_1.protectAdmin, blogController.execute);
 router.patch("/status/:id", authMiddleware_1.protectAdmin, blogController.execute);
+router.get("/published", blogController.execute);
 exports.default = router;
