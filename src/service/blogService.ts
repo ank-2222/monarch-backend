@@ -59,9 +59,7 @@ export class BlogService {
     return await Blog.findByIdAndUpdate(blogId, { status }, { new: true });
   }
 
-  async getPublishedBlogs(): Promise<IBlog[]> {
-    return await Blog.find({ status: "published" });
-  }
+ 
   
 
 }

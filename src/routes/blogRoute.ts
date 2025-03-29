@@ -11,6 +11,5 @@ router.get("/:id", blogController.execute);
 router.put("/:id", protectAdmin, blogController.execute);
 router.delete("/:id", protectAdmin, blogController.execute);
 router.patch("/status/:id", protectAdmin, blogController.execute);
-router.get("/published",  blogController.execute);
 
 export default router;
